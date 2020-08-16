@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tabuleiro
+﻿namespace Tabuleiro
 {
-    class Cor
+    enum Cor
     {
-
-    }
+        Branca,
+        Preta
+    };
 }
