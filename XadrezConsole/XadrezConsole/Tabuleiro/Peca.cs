@@ -4,7 +4,7 @@
     {
         public Posicao Posicao { get; set; }
         public Cor Cor { get; protected set; }
-        public int QtdMovimentos { get; set; }
+        public int QteMovimentos { get; set; }
         public Tabuleiro Tab { get; protected set; }
 
         public Peca(Tabuleiro tab, Cor cor)
@@ -12,7 +12,12 @@
             Posicao = null;
             Tab = tab;
             Cor = cor;
-            QtdMovimentos = 0;
+            QteMovimentos = 0;
+        }
+
+        public void IncrementarQteMovimentos()
+        {
+            QteMovimentos++;
         }
     }
 }
