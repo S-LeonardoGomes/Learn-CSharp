@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EventosAPI.Aplicacao\EventosAPI.Aplicacao.csproj" />
+    <ProjectReference Include="..\EventosAPI.Data\EventosAPI.Data.csproj" />
+    <ProjectReference Include="..\EventosApi.Domain.Core\EventosAPI.Domain.Core.csproj" />
+    <ProjectReference Include="..\EventosAPI.Infra.CrossCutting.Integracao\EventosAPI.Infra.CrossCutting.Integracao.csproj" />
+  </ItemGroup>
+
+</Project>
