@@ -1,2 +1,2 @@
-# Learn-CSharp
-Repositório destinado a armazenar projetos no ambiente .NET
+## Learn-CSharp
+> Este repositório é destinado ao armazenamento de projetos em ambiente C# .Net 
