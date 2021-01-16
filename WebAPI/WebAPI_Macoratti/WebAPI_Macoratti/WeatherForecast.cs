@@ -1,6 +1,6 @@
 using System;
 
-namespace WebAPI_Macoratti
+namespace APICatalogo
 {
     public class WeatherForecast
     {
