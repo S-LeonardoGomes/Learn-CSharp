@@ -26,13 +26,22 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id}", Name = "ObterProduto")]
         public ActionResult<Produto> Get(int id)
         {
             Produto produto = _context.Produtos.AsNoTracking().FirstOrDefault(p => p.ProdutoId == id);
             if (produto == null)
                 return NotFound();
             return produto;
+        }
+
+        [HttpPost]
+        public ActionResult Post(Produto produto)
+        {
+            _context.Produtos.Add(produto);
+            _context.SaveChanges();
+
+            return new CreatedAtRouteResult("ObterProduto", new { id = produto.ProdutoId }, produto);
         }
     }
 }
