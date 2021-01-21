@@ -22,7 +22,7 @@ namespace APICatalogo.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Categoria>> Get()
         {
-            return _context.Categorias.AsNoTracking().ToList();
+            return _context.Categorias.Include(x => x.Produtos).ToList();
         }
 
         [HttpGet("{id}", Name = "ObterCategoria")]
