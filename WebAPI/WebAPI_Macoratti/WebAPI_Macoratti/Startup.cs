@@ -44,14 +44,21 @@ namespace APICatalogo
                 app.UseDeveloperExceptionPage();
             }
 
+            //adiciona o middleware para redirecionar para HTTPS
             app.UseHttpsRedirection();
 
+            //adiciona o middleware de roteamento
             app.UseRouting();
 
+            app.UseAuthentication();
+
+            //adiciona o middleware que habilita a autorização
             app.UseAuthorization();
 
+            //Adiciona o middleware que executa o endpoint do request atual
             app.UseEndpoints(endpoints =>
             {
+                //adiciona os endpoints para as Actions dos controladores sem especificar rotas
                 endpoints.MapControllers();
             });
         }
