@@ -1,4 +1,5 @@
 using APICatalogo.Context;
+using APICatalogo.Extensions;
 using APICatalogo.Filters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,9 @@ namespace APICatalogo
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //adiciona o middleware de tratamento de erros
+            app.ConfigureExceptionHandler();
 
             //adiciona o middleware para redirecionar para HTTPS
             app.UseHttpsRedirection();
