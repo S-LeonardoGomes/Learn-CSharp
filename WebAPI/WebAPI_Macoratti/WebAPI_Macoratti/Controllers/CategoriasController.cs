@@ -28,15 +28,15 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("produtos")]
-        public ActionResult<IEnumerable<CategoriaDTO>> GetCategoriasProdutos()
+        public async Task<ActionResult<IEnumerable<CategoriaDTO>>> GetCategoriasProdutos()
         {
-            List<Categoria> categoria = _uof.CategoriaRepository.GetCategoriasProdutos().ToList();
+            IEnumerable<Categoria> categoria = await _uof.CategoriaRepository.GetCategoriasProdutos();
             List<CategoriaDTO> categoriaDTO = _mapper.Map<List<CategoriaDTO>>(categoria);
             return categoriaDTO;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<CategoriaDTO>> Get([FromQuery] CategoriasParameters categoriasParameters)
+        public async Task<ActionResult<IEnumerable<CategoriaDTO>>> Get([FromQuery] CategoriasParameters categoriasParameters)
         {
             PagedList<Categoria> categorias = _uof.CategoriaRepository.GetCategorias(categoriasParameters);
 
@@ -57,9 +57,9 @@ namespace APICatalogo.Controllers
         }
 
         [HttpGet("{id}", Name = "ObterCategoria")]
-        public ActionResult<CategoriaDTO> Get(int id)
+        public async Task<ActionResult<CategoriaDTO>> Get(int id)
         {
-            Categoria categoria = _uof.CategoriaRepository.GetById(c => c.CategoriaId == id);
+            Categoria categoria = await _uof.CategoriaRepository.GetById(c => c.CategoriaId == id);
             if (categoria == null)
                 return NotFound($"A categoria com id = {id} não foi encontrada");
 
@@ -68,11 +68,11 @@ namespace APICatalogo.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] CategoriaDTO categoriaDto)
+        public async Task<ActionResult> Post([FromBody] CategoriaDTO categoriaDto)
         {
             Categoria categoria = _mapper.Map<Categoria>(categoriaDto);
             _uof.CategoriaRepository.Add(categoria);
-            _uof.Commit();
+            await _uof.Commit();
 
             CategoriaDTO categoriaDTO = _mapper.Map<CategoriaDTO>(categoria);
             return new CreatedAtRouteResult("ObterCategoria", new { id = categoria.CategoriaId }, categoriaDTO);
@@ -80,27 +80,27 @@ namespace APICatalogo.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        public ActionResult Put(int id, [FromBody] CategoriaDTO categoriaDto)
+        public async Task<ActionResult> Put(int id, [FromBody] CategoriaDTO categoriaDto)
         {
             if (id != categoriaDto.CategoriaId)
                 return BadRequest($"Não foi possível alterar a categoria com id = {id}");
 
             Categoria categoria = _mapper.Map<Categoria>(categoriaDto);
             _uof.CategoriaRepository.Update(categoria);
-            _uof.Commit();
+            await _uof.Commit();
             return Ok($"Categoria com id = {id} atualizada com sucesso");
         }
 
         [HttpDelete]
         [Route("{id}")]
-        public ActionResult<CategoriaDTO> Delete(int id)
+        public async Task<ActionResult<CategoriaDTO>> Delete(int id)
         {
-            Categoria categoria = _uof.CategoriaRepository.GetById(c => c.CategoriaId == id);
+            Categoria categoria = await _uof.CategoriaRepository.GetById(c => c.CategoriaId == id);
             if (categoria == null)
                 return NotFound($"A categoria com id = {id} não foi encontrada");
 
             _uof.CategoriaRepository.Delete(categoria);
-            _uof.Commit();
+            await _uof.Commit();
 
             CategoriaDTO categoriaDTO = _mapper.Map<CategoriaDTO>(categoria);
             return categoriaDTO;
