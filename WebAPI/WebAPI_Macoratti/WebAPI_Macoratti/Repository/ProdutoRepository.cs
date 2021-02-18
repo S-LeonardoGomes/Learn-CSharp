@@ -15,7 +15,7 @@ namespace APICatalogo.Repository
         {
         }
 
-        public PagedList<Produto> GetProdutos(ProdutosParameters produtosParameters)
+        public async Task<PagedList<Produto>> GetProdutos(ProdutosParameters produtosParameters)
         {
             /*
             return Get()
@@ -25,7 +25,7 @@ namespace APICatalogo.Repository
                 .ToList();
             */
 
-            return PagedList<Produto>.ToPagedList(Get().OrderBy(on => on.Nome), 
+            return await PagedList<Produto>.ToPagedList(Get().OrderBy(on => on.Nome), 
                 produtosParameters.PageNumber, produtosParameters.PageSize);
         }
 

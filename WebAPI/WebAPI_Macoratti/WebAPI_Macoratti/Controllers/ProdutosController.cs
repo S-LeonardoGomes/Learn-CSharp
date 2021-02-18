@@ -39,7 +39,7 @@ namespace APICatalogo.Controllers
         //[ServiceFilter(typeof(ApiLoggingFilter))]
         public async Task<ActionResult<IEnumerable<ProdutoDTO>>> Get([FromQuery] ProdutosParameters produtosParameters)
         {
-            PagedList<Produto> produtos = _uof.ProdutoRepository.GetProdutos(produtosParameters);
+            PagedList<Produto> produtos = await _uof.ProdutoRepository.GetProdutos(produtosParameters);
 
             var metadata = new
             {
