@@ -8,6 +8,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -35,14 +36,21 @@ namespace APICatalogo
         {
             //Banco de dados
             string mySqlConnection = Configuration.GetConnectionString("DefaultConnection");
-            //services.AddScoped<ApiLoggingFilter>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
             services.AddDbContext<AppDbContext>(options => options.UseMySql(mySqlConnection, ServerVersion.AutoDetect(mySqlConnection)));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddControllers();
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
+
+            //services.AddScoped<ApiLoggingFilter>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             //AutoMapper
             MapperConfiguration mappingConfig = new MapperConfiguration(mc =>
@@ -76,6 +84,7 @@ namespace APICatalogo
             //adiciona o middleware de roteamento
             app.UseRouting();
 
+            //adiciona o middleware de autenticação
             app.UseAuthentication();
 
             //adiciona o middleware que habilita a autorização
