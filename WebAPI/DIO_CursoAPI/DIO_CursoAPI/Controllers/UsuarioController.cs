@@ -1,6 +1,8 @@
 ﻿using DIO_CursoAPI.Business.Entities;
+using DIO_CursoAPI.Business.Repositories;
 using DIO_CursoAPI.Filters;
 using DIO_CursoAPI.Infraestruture.Data;
+using DIO_CursoAPI.Infraestruture.Data.Repositories;
 using DIO_CursoAPI.Models;
 using DIO_CursoAPI.Models.Usuarios;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +24,13 @@ namespace DIO_CursoAPI.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
+        private readonly IUsuarioRepository _usuarioRepository;
+
+        public UsuarioController(IUsuarioRepository usuarioRepository)
+        {
+            _usuarioRepository = usuarioRepository;
+        }
+
         [SwaggerResponse(statusCode: 200, description: "Sucesso ao autenticar", Type = typeof(LoginViewModelInput))]
         [SwaggerResponse(statusCode: 400, description: "Campos obrigatórios", Type = typeof(ValidaCampoViewModelOutput))]
         [SwaggerResponse(statusCode: 500, description: "Erro interno", Type = typeof(ErroGenericoViewModel))]
@@ -66,6 +75,7 @@ namespace DIO_CursoAPI.Controllers
         [HttpPost("registrar")]
         public IActionResult Registrar(RegistroViewModelInput registroViewModelInput)
         {
+/*
             var optionsBuilder = new DbContextOptionsBuilder<CursoDbContext>();
             optionsBuilder.UseSqlServer("Server=MARK-1\\MSSQLEXPRESS;Database=DIOCurso;user=Testes;password=testes@21");
             CursoDbContext contexto = new CursoDbContext(optionsBuilder.Options);
@@ -74,13 +84,13 @@ namespace DIO_CursoAPI.Controllers
 
             if (migracoesPendentes.Count() > 0)
                 contexto.Database.Migrate();
-
+*/
             var usuario = new Usuario();
             usuario.Login = registroViewModelInput.Login;
             usuario.Senha = registroViewModelInput.Senha;
             usuario.Email = registroViewModelInput.Email;
-            contexto.Usuario.Add(usuario);
-            contexto.SaveChanges();
+            _usuarioRepository.Adicionar(usuario);
+            _usuarioRepository.Commit();
 
             return Created("", registroViewModelInput);
         }
