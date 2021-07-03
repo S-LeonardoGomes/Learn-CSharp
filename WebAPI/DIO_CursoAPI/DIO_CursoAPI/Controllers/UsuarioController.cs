@@ -1,8 +1,11 @@
-﻿using DIO_CursoAPI.Filters;
+﻿using DIO_CursoAPI.Business.Entities;
+using DIO_CursoAPI.Filters;
+using DIO_CursoAPI.Infraestruture.Data;
 using DIO_CursoAPI.Models;
 using DIO_CursoAPI.Models.Usuarios;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
@@ -63,6 +66,18 @@ namespace DIO_CursoAPI.Controllers
         [HttpPost("registrar")]
         public IActionResult Registrar(RegistroViewModelInput registroViewModelInput)
         {
+            var optionsBuilder = new DbContextOptionsBuilder<CursoDbContext>();
+            optionsBuilder.UseSqlServer("Server=MARK-1\\MSSQLEXPESS;Database=DIOCurso;user=Teste;password=testes@21");
+
+            CursoDbContext contexto = new CursoDbContext(optionsBuilder.Options);
+
+            var usuario = new Usuario();
+            usuario.Login = registroViewModelInput.Login;
+            usuario.Senha = registroViewModelInput.Senha;
+            usuario.Email = registroViewModelInput.Email;
+            contexto.Usuario.Add(usuario);
+            contexto.SaveChanges();
+
             return Created("", registroViewModelInput);
         }
     }
