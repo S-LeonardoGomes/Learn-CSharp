@@ -67,9 +67,13 @@ namespace DIO_CursoAPI.Controllers
         public IActionResult Registrar(RegistroViewModelInput registroViewModelInput)
         {
             var optionsBuilder = new DbContextOptionsBuilder<CursoDbContext>();
-            optionsBuilder.UseSqlServer("Server=MARK-1\\MSSQLEXPESS;Database=DIOCurso;user=Teste;password=testes@21");
-
+            optionsBuilder.UseSqlServer("Server=MARK-1\\MSSQLEXPRESS;Database=DIOCurso;user=Testes;password=testes@21");
             CursoDbContext contexto = new CursoDbContext(optionsBuilder.Options);
+
+            var migracoesPendentes = contexto.Database.GetPendingMigrations();
+
+            if (migracoesPendentes.Count() > 0)
+                contexto.Database.Migrate();
 
             var usuario = new Usuario();
             usuario.Login = registroViewModelInput.Login;
