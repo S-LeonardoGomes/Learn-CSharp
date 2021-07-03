@@ -1,4 +1,5 @@
 using DIO_CursoAPI.Business.Repositories;
+using DIO_CursoAPI.Configuration;
 using DIO_CursoAPI.Infraestruture.Data;
 using DIO_CursoAPI.Infraestruture.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -85,7 +86,9 @@ namespace DIO_CursoAPI
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IAuthenticationService, JwtService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

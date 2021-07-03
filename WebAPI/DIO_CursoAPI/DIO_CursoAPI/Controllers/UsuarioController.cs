@@ -29,12 +29,19 @@ namespace DIO_CursoAPI.Controllers
         [HttpPost("logar")]
         public IActionResult Logar(LoginViewModelInput loginViewModelInput)
         {
-            //login provisório
+            var usuario = _usuarioRepository.ObterUsuario(loginViewModelInput.Login, loginViewModelInput.Senha);
+
+            if (usuario == null)
+                return BadRequest("Houve um erro ao tentar acessar.");
+            /*
+            if (usuario.Senha != loginViewModel.Senha.GerarSenhaCriptogafada())
+                return BadRequest("Houve um erro ");
+            */
             var usuarioViewModelOutput = new UsuarioViewModelOutput()
             {
-                Codigo = 1,
-                Login = "teste",
-                Email = "teste@gmail.com"
+                Codigo = usuario.Codigo,
+                Login = loginViewModelInput.Login,
+                Email = usuario.Email
             };
 
             var token = _authenticationService.GerarToken(usuarioViewModelOutput);
