@@ -87,8 +87,9 @@ namespace DIO_CursoAPI
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IAuthenticationService, JwtService>();
+            services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<ICursoRepository, CursoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,6 @@
 ﻿using DIO_CursoAPI.Business.Entities;
 using DIO_CursoAPI.Business.Repositories;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,7 +27,8 @@ namespace DIO_CursoAPI.Infraestruture.Data.Repositories
 
         public IList<Curso> ObterPorUsuario(int codigoUsuario)
         {
-            return _contexto.Curso.Where(w => w.CodigoUsuario == codigoUsuario).ToList();
+            return _contexto.Curso.Include(i => i.Usuario).Where(w => w.CodigoUsuario == codigoUsuario)
+                .ToList();
         }
     }
 }
