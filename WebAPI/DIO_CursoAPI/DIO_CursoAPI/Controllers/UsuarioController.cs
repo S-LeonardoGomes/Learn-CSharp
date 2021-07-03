@@ -1,22 +1,15 @@
 ﻿using DIO_CursoAPI.Business.Entities;
 using DIO_CursoAPI.Business.Repositories;
 using DIO_CursoAPI.Filters;
-using DIO_CursoAPI.Infraestruture.Data;
-using DIO_CursoAPI.Infraestruture.Data.Repositories;
 using DIO_CursoAPI.Models;
 using DIO_CursoAPI.Models.Usuarios;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DIO_CursoAPI.Controllers
 {
@@ -75,16 +68,11 @@ namespace DIO_CursoAPI.Controllers
         [HttpPost("registrar")]
         public IActionResult Registrar(RegistroViewModelInput registroViewModelInput)
         {
-/*
-            var optionsBuilder = new DbContextOptionsBuilder<CursoDbContext>();
-            optionsBuilder.UseSqlServer("Server=MARK-1\\MSSQLEXPRESS;Database=DIOCurso;user=Testes;password=testes@21");
-            CursoDbContext contexto = new CursoDbContext(optionsBuilder.Options);
-
-            var migracoesPendentes = contexto.Database.GetPendingMigrations();
-
-            if (migracoesPendentes.Count() > 0)
-                contexto.Database.Migrate();
-*/
+            /*
+                        var migracoesPendentes = contexto.Database.GetPendingMigrations();
+                        if (migracoesPendentes.Count() > 0)
+                            contexto.Database.Migrate();
+            */
             var usuario = new Usuario();
             usuario.Login = registroViewModelInput.Login;
             usuario.Senha = registroViewModelInput.Senha;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace DIO_CursoAPI.Models.Cursos
+﻿namespace DIO_CursoAPI.Models.Cursos
 {
     public class CursoViewModelOutput
     {
