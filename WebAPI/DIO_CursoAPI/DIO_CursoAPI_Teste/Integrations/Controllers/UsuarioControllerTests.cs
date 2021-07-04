@@ -39,11 +39,33 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
                 Encoding.UTF8, "application/json");
 
             //Act
-            var httpClientRequest = _httpClient.PostAsync("api/v1/usuario/logar", content).GetAwaiter()
-                .GetResult();
+            var httpClientRequest = _httpClient.PostAsync("api/v1/usuario/logar", content)
+                .GetAwaiter().GetResult();
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, httpClientRequest.StatusCode);
+        }
+
+        [Fact]
+        public void Registrar_InformandoUsuarioESenha_DeveRetornarSucesso()
+        {
+            //Arrange
+            var registroViewModelInput = new RegistroViewModelInput
+            {
+                Login = "Teste",
+                Email = "teste@teste.com",
+                Senha = "abc1234"
+            };
+
+            StringContent content = new StringContent(JsonConvert.SerializeObject(registroViewModelInput),
+                Encoding.UTF8, "application/json");
+
+            //Act
+            var httpClientRequest = _httpClient.PostAsync("api/v1/usuario/registrar", content)
+                .GetAwaiter().GetResult();
+
+            //Assert
+            Assert.Equal(HttpStatusCode.Created, httpClientRequest.StatusCode);
         }
     }
 }
