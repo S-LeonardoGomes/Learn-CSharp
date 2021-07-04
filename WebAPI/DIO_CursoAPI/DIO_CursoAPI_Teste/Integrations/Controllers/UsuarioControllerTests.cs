@@ -10,17 +10,21 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace DIO_CursoAPI_Teste.Integrations.Controllers
 {
     public class UsuarioControllerTests : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly WebApplicationFactory<Startup> _factory;
+        private readonly ITestOutputHelper _output;
         private readonly HttpClient _httpClient;
 
-        public UsuarioControllerTests(WebApplicationFactory<Startup> factory)
+        public UsuarioControllerTests(WebApplicationFactory<Startup> factory,
+            ITestOutputHelper output)
         {
             _factory = factory;
+            _output = output;
             //autenticar//trafegar nas rotas
             _httpClient = _factory.CreateClient();
         }
@@ -49,6 +53,7 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
             Assert.Equal(HttpStatusCode.OK, httpClientRequest.StatusCode);
             Assert.NotNull(loginViewModelOutput.Token);
             Assert.Equal(loginViewModelInput.Login, loginViewModelOutput.Usuario.Login);
+            _output.WriteLine(loginViewModelOutput.Token);
         }
 
         [Fact]
