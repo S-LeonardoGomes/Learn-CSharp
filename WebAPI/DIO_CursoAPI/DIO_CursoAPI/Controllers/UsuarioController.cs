@@ -46,7 +46,7 @@ namespace DIO_CursoAPI.Controllers
 
             var token = _authenticationService.GerarToken(usuarioViewModelOutput);
 
-            return Ok(new
+            return Ok(new LoginViewModelOutput
             {
                 Token = token,
                 Usuario = usuarioViewModelOutput

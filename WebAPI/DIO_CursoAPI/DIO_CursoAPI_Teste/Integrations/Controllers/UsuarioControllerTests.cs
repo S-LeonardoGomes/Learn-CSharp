@@ -42,8 +42,13 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
             var httpClientRequest = _httpClient.PostAsync("api/v1/usuario/logar", content)
                 .GetAwaiter().GetResult();
 
+            var loginViewModelOutput = JsonConvert.DeserializeObject<LoginViewModelOutput>
+                (httpClientRequest.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+
             //Assert
             Assert.Equal(HttpStatusCode.OK, httpClientRequest.StatusCode);
+            Assert.NotNull(loginViewModelOutput.Token);
+            Assert.Equal(loginViewModelInput.Login, loginViewModelOutput.Usuario.Login);
         }
 
         [Fact]
