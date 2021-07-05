@@ -25,7 +25,7 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
         }
 
         [Fact]
-        public async Task Registrar_InformandoDadosDeUmCursoValido_DeveRetornarSucesso()
+        public async Task Registrar_InformandoDadosDeUmCursoValidoEUmUsuarioAutenticado_DeveRetornarSucesso()
         {
             //Arrange
             var cursoViewModelInput = new AutoFaker<CursoViewModelInput>();
@@ -40,9 +40,32 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
 
             //Assert
             _output.WriteLine($"{nameof(CursoControllerTests)} : " +
-                $"{nameof(Registrar_InformandoDadosDeUmCursoValido_DeveRetornarSucesso)} -> " +
+                $"{nameof(Registrar_InformandoDadosDeUmCursoValidoEUmUsuarioAutenticado_DeveRetornarSucesso)} -> " +
                 $"{await httpClientRequest.Content.ReadAsStringAsync()}");
             Assert.Equal(HttpStatusCode.Created, httpClientRequest.StatusCode);
+        }
+
+        [Fact]
+        public async Task Obter_InformandoUmUsuarioAutenticado_DeveRetornarSucesso()
+        {
+            //Arrange
+            await Registrar_InformandoDadosDeUmCursoValidoEUmUsuarioAutenticado_DeveRetornarSucesso();
+
+            //Act
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
+                LoginViewModelOutput.Token);
+            var httpClientRequest = await _httpClient.GetAsync("api/v1/cursos");
+
+            //Assert
+            _output.WriteLine($"{nameof(CursoControllerTests)} : " +
+                $"{nameof(Obter_InformandoUmUsuarioAutenticado_DeveRetornarSucesso)} -> " +
+                $"{await httpClientRequest.Content.ReadAsStringAsync()}");
+            
+            var cursos = JsonConvert.DeserializeObject<IList<CursoViewModelOutput>>
+                (await httpClientRequest.Content.ReadAsStringAsync());
+
+            Assert.NotEmpty(cursos);
+            Assert.Equal(HttpStatusCode.OK, httpClientRequest.StatusCode);
         }
     }
 }
