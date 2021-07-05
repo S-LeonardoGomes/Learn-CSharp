@@ -19,8 +19,8 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
     public class UsuarioControllerTests : IClassFixture<WebApplicationFactory<Startup>>, IAsyncLifetime
     {
         private readonly WebApplicationFactory<Startup> _factory;
-        private readonly ITestOutputHelper _output;
-        private readonly HttpClient _httpClient;
+        protected readonly ITestOutputHelper _output;
+        protected readonly HttpClient _httpClient;
         protected RegistroViewModelInput RegistroViewModelInput;
 
         public UsuarioControllerTests(WebApplicationFactory<Startup> factory,
