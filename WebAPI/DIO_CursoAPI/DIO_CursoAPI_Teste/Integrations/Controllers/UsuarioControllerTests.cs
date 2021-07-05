@@ -1,4 +1,5 @@
-﻿using DIO_CursoAPI;
+﻿using AutoBogus;
+using DIO_CursoAPI;
 using DIO_CursoAPI.Models.Usuarios;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -72,12 +73,8 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
         public async Task Registrar_InformandoUsuarioESenha_DeveRetornarSucesso()
         {
             //Arrange
-            RegistroViewModelInput = new RegistroViewModelInput
-            {
-                Login = "Teste",
-                Email = "teste@teste.com",
-                Senha = "abc1234"
-            };
+            RegistroViewModelInput = new AutoFaker<RegistroViewModelInput>()
+                .RuleFor(p => p.Email, faker => faker.Person.Email);
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(RegistroViewModelInput),
                 Encoding.UTF8, "application/json");
@@ -86,6 +83,7 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
             var httpClientRequest = await _httpClient.PostAsync("api/v1/usuario/registrar", content);
 
             //Assert
+            _output.WriteLine(await httpClientRequest.Content.ReadAsStringAsync());
             Assert.Equal(HttpStatusCode.Created, httpClientRequest.StatusCode);
         }
     }
