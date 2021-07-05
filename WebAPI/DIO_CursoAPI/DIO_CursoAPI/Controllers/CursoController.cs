@@ -26,14 +26,23 @@ namespace DIO_CursoAPI.Controllers
         [HttpPost("")]
         public IActionResult Post(CursoViewModelInput cursoViewModelInput)
         {
-            Curso curso = new Curso();
-            curso.Nome = cursoViewModelInput.Nome;
-            curso.Descricao = cursoViewModelInput.Descricao;
+            Curso curso = new Curso
+            {
+                Nome = cursoViewModelInput.Nome,
+                Descricao = cursoViewModelInput.Descricao
+            };
+
             var codigoUsuario = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value);
             curso.CodigoUsuario = codigoUsuario;
 
             _cursoRepository.Adicionar(curso);
             _cursoRepository.Commit();
+
+            var cursoViewModelOutput = new CursoViewModelOutput
+            {
+                Nome = curso.Nome,
+                Descricao = curso.Descricao
+            };
 
             return Created("", cursoViewModelInput);
         }

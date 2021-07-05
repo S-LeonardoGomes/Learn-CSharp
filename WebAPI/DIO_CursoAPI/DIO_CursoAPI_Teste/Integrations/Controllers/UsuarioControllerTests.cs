@@ -22,6 +22,7 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
         protected readonly ITestOutputHelper _output;
         protected readonly HttpClient _httpClient;
         protected RegistroViewModelInput RegistroViewModelInput;
+        protected LoginViewModelOutput LoginViewModelOutput;
 
         public UsuarioControllerTests(WebApplicationFactory<Startup> factory,
             ITestOutputHelper output)
@@ -41,6 +42,7 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
         public async Task InitializeAsync()
         {
             await Registrar_InformandoUsuarioESenha_DeveRetornarSucesso();
+            await Logar_InformandoUsuarioESenhaExistentes_DeveRetornarSucesso();
         }
 
         [Fact]
@@ -59,14 +61,16 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
             //Act
             var httpClientRequest = await _httpClient.PostAsync("api/v1/usuario/logar", content);
 
-            var loginViewModelOutput = JsonConvert.DeserializeObject<LoginViewModelOutput>
+            LoginViewModelOutput = JsonConvert.DeserializeObject<LoginViewModelOutput>
                 (await httpClientRequest.Content.ReadAsStringAsync());
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, httpClientRequest.StatusCode);
-            Assert.NotNull(loginViewModelOutput.Token);
-            Assert.Equal(loginViewModelInput.Login, loginViewModelOutput.Usuario.Login);
-            _output.WriteLine(loginViewModelOutput.Token);
+            Assert.NotNull(LoginViewModelOutput.Token);
+            Assert.Equal(loginViewModelInput.Login, LoginViewModelOutput.Usuario.Login);
+            _output.WriteLine($"{nameof(CursoControllerTests)} : " +
+                $"{nameof(Logar_InformandoUsuarioESenhaExistentes_DeveRetornarSucesso)} -> " +
+                $"{LoginViewModelOutput.Token}");
         }
 
         [Fact]
@@ -83,7 +87,9 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
             var httpClientRequest = await _httpClient.PostAsync("api/v1/usuario/registrar", content);
 
             //Assert
-            _output.WriteLine(await httpClientRequest.Content.ReadAsStringAsync());
+            _output.WriteLine($"{nameof(UsuarioControllerTests)} : " +
+                $"{nameof(Registrar_InformandoUsuarioESenha_DeveRetornarSucesso)} -> " +
+                $"{await httpClientRequest.Content.ReadAsStringAsync()}");
             Assert.Equal(HttpStatusCode.Created, httpClientRequest.StatusCode);
         }
     }
