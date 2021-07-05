@@ -15,11 +15,12 @@ using Xunit.Abstractions;
 
 namespace DIO_CursoAPI_Teste.Integrations.Controllers
 {
-    public class UsuarioControllerTests : IClassFixture<WebApplicationFactory<Startup>>
+    public class UsuarioControllerTests : IClassFixture<WebApplicationFactory<Startup>>, IAsyncLifetime
     {
         private readonly WebApplicationFactory<Startup> _factory;
         private readonly ITestOutputHelper _output;
         private readonly HttpClient _httpClient;
+        protected RegistroViewModelInput RegistroViewModelInput;
 
         public UsuarioControllerTests(WebApplicationFactory<Startup> factory,
             ITestOutputHelper output)
@@ -30,14 +31,25 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
             _httpClient = _factory.CreateClient();
         }
 
+        public async Task DisposeAsync()
+        {
+            _httpClient.Dispose();
+
+        }
+
+        public async Task InitializeAsync()
+        {
+            await Registrar_InformandoUsuarioESenha_DeveRetornarSucesso();
+        }
+
         [Fact]
         public async Task Logar_InformandoUsuarioESenhaExistentes_DeveRetornarSucesso()
         {
             //Arrange
             var loginViewModelInput = new LoginViewModelInput
             {
-                Login = "string",
-                Senha = "string"
+                Login = RegistroViewModelInput.Login,
+                Senha = RegistroViewModelInput.Senha
             };
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(loginViewModelInput),
@@ -57,22 +69,21 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
         }
 
         [Fact]
-        public void Registrar_InformandoUsuarioESenha_DeveRetornarSucesso()
+        public async Task Registrar_InformandoUsuarioESenha_DeveRetornarSucesso()
         {
             //Arrange
-            var registroViewModelInput = new RegistroViewModelInput
+            RegistroViewModelInput = new RegistroViewModelInput
             {
                 Login = "Teste",
                 Email = "teste@teste.com",
                 Senha = "abc1234"
             };
 
-            StringContent content = new StringContent(JsonConvert.SerializeObject(registroViewModelInput),
+            StringContent content = new StringContent(JsonConvert.SerializeObject(RegistroViewModelInput),
                 Encoding.UTF8, "application/json");
 
             //Act
-            var httpClientRequest = _httpClient.PostAsync("api/v1/usuario/registrar", content)
-                .GetAwaiter().GetResult();
+            var httpClientRequest = await _httpClient.PostAsync("api/v1/usuario/registrar", content);
 
             //Assert
             Assert.Equal(HttpStatusCode.Created, httpClientRequest.StatusCode);

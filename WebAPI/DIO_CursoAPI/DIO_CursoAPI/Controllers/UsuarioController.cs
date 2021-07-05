@@ -56,14 +56,21 @@ namespace DIO_CursoAPI.Controllers
 
         [ValidacaoModelStateCustomizado]
         [HttpPost("registrar")]
-        public IActionResult Registrar(RegistroViewModelInput registroViewModelInput)
+        public async Task<IActionResult> Registrar(RegistroViewModelInput registroViewModelInput)
         {
             /*
                         var migracoesPendentes = contexto.Database.GetPendingMigrations();
                         if (migracoesPendentes.Count() > 0)
                             contexto.Database.Migrate();
             */
-            var usuario = new Usuario();
+
+            var usuario = await _usuarioRepository.ObterUsuarioAsync(registroViewModelInput.Login, 
+                registroViewModelInput.Senha);
+
+            if (usuario != null)
+                return BadRequest("Usuário já cadastrado");
+
+            usuario = new Usuario();
             usuario.Login = registroViewModelInput.Login;
             usuario.Senha = registroViewModelInput.Senha;
             usuario.Email = registroViewModelInput.Email;
