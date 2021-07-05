@@ -6,6 +6,7 @@ using DIO_CursoAPI.Models;
 using DIO_CursoAPI.Models.Usuarios;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Threading.Tasks;
 
 namespace DIO_CursoAPI.Controllers
 {
@@ -27,9 +28,9 @@ namespace DIO_CursoAPI.Controllers
         [SwaggerResponse(statusCode: 500, description: "Erro interno", Type = typeof(ErroGenericoViewModel))]
         [ValidacaoModelStateCustomizado]
         [HttpPost("logar")]
-        public IActionResult Logar(LoginViewModelInput loginViewModelInput)
+        public async Task<IActionResult> Logar(LoginViewModelInput loginViewModelInput)
         {
-            var usuario = _usuarioRepository.ObterUsuario(loginViewModelInput.Login, loginViewModelInput.Senha);
+            var usuario = await _usuarioRepository.ObterUsuarioAsync(loginViewModelInput.Login, loginViewModelInput.Senha);
 
             if (usuario == null)
                 return BadRequest("Houve um erro ao tentar acessar.");

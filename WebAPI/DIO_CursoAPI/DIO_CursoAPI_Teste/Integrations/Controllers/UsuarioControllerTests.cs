@@ -1,5 +1,6 @@
 ﻿using DIO_CursoAPI;
 using DIO_CursoAPI.Models.Usuarios;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using System;
@@ -30,7 +31,7 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
         }
 
         [Fact]
-        public void Logar_InformandoUsuarioESenhaExistentes_DeveRetornarSucesso()
+        public async Task Logar_InformandoUsuarioESenhaExistentes_DeveRetornarSucesso()
         {
             //Arrange
             var loginViewModelInput = new LoginViewModelInput
@@ -43,11 +44,10 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
                 Encoding.UTF8, "application/json");
 
             //Act
-            var httpClientRequest = _httpClient.PostAsync("api/v1/usuario/logar", content)
-                .GetAwaiter().GetResult();
+            var httpClientRequest = await _httpClient.PostAsync("api/v1/usuario/logar", content);
 
             var loginViewModelOutput = JsonConvert.DeserializeObject<LoginViewModelOutput>
-                (httpClientRequest.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+                (await httpClientRequest.Content.ReadAsStringAsync());
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, httpClientRequest.StatusCode);

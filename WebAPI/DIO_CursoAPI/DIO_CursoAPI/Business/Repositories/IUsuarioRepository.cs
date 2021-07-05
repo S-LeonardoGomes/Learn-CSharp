@@ -1,4 +1,5 @@
 ﻿using DIO_CursoAPI.Business.Entities;
+using System.Threading.Tasks;
 
 namespace DIO_CursoAPI.Business.Repositories
 {
@@ -6,6 +7,6 @@ namespace DIO_CursoAPI.Business.Repositories
     {
         void Adicionar(Usuario usuario);
         void Commit();
-        Usuario ObterUsuario(string login, string senha);
+        Task<Usuario> ObterUsuarioAsync(string login, string senha);
     }
 }
