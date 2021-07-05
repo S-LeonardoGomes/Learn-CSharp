@@ -1,7 +1,6 @@
 ﻿using DIO_CursoAPI.Business.Entities;
 using DIO_CursoAPI.Business.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DIO_CursoAPI.Infraestruture.Data.Repositories

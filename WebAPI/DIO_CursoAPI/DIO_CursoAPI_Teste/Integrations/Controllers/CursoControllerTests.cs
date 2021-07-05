@@ -4,9 +4,7 @@ using DIO_CursoAPI.Models.Cursos;
 using DIO_CursoAPI.Models.Usuarios;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -34,7 +32,7 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
                 Encoding.UTF8, "application/json");
 
             //Act
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", 
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",
                 LoginViewModelOutput.Token);
             var httpClientRequest = await _httpClient.PostAsync("api/v1/cursos", content);
 
@@ -43,6 +41,25 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
                 $"{nameof(Registrar_InformandoDadosDeUmCursoValidoEUmUsuarioAutenticado_DeveRetornarSucesso)} -> " +
                 $"{await httpClientRequest.Content.ReadAsStringAsync()}");
             Assert.Equal(HttpStatusCode.Created, httpClientRequest.StatusCode);
+        }
+
+        [Fact]
+        public async Task Registrar_InformandoDadosDeUmCursoValidoEUmUsuarioNaoAutenticado_DeveRetornarSucesso()
+        {
+            //Arrange
+            var cursoViewModelInput = new AutoFaker<CursoViewModelInput>();
+
+            StringContent content = new StringContent(JsonConvert.SerializeObject(cursoViewModelInput.Generate()),
+                Encoding.UTF8, "application/json");
+
+            //Act
+            var httpClientRequest = await _httpClient.PostAsync("api/v1/cursos", content);
+
+            //Assert
+            _output.WriteLine($"{nameof(CursoControllerTests)} : " +
+                $"{nameof(Registrar_InformandoDadosDeUmCursoValidoEUmUsuarioAutenticado_DeveRetornarSucesso)} -> " +
+                $"{await httpClientRequest.Content.ReadAsStringAsync()}");
+            Assert.Equal(HttpStatusCode.Unauthorized, httpClientRequest.StatusCode);
         }
 
         [Fact]
@@ -60,7 +77,7 @@ namespace DIO_CursoAPI_Teste.Integrations.Controllers
             _output.WriteLine($"{nameof(CursoControllerTests)} : " +
                 $"{nameof(Obter_InformandoUmUsuarioAutenticado_DeveRetornarSucesso)} -> " +
                 $"{await httpClientRequest.Content.ReadAsStringAsync()}");
-            
+
             var cursos = JsonConvert.DeserializeObject<IList<CursoViewModelOutput>>
                 (await httpClientRequest.Content.ReadAsStringAsync());
 

@@ -64,7 +64,7 @@ namespace DIO_CursoAPI.Controllers
                             contexto.Database.Migrate();
             */
 
-            var usuario = await _usuarioRepository.ObterUsuarioAsync(registroViewModelInput.Login, 
+            var usuario = await _usuarioRepository.ObterUsuarioAsync(registroViewModelInput.Login,
                 registroViewModelInput.Senha);
 
             if (usuario != null)

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace DIO_CursoAPI.Models.Usuarios
+﻿namespace DIO_CursoAPI.Models.Usuarios
 {
     public class LoginViewModelOutput
     {
